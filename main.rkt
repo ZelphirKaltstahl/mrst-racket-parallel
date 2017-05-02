@@ -1,8 +1,12 @@
 #lang racket
 
+(define (Mb-to-B n) (* n 1024 1024))
+(define MAX-BYTES (Mb-to-B 256))
+(custodian-limit-memory (current-custodian) MAX-BYTES)
+
 (provide main)
 
-(define PLACES-COUNT 1)
+(define PLACES-COUNT 4)
 (define MIN 0)
 (define MAX 10000000)
 

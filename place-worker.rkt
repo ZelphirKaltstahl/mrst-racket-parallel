@@ -7,6 +7,7 @@
 ;; This number is larger than 64bit integer range.
 ;; https://en.wikipedia.org/wiki/Miller–Rabin_primality_test
 (define SIGNIFICANT-PRIMES (list 2 3 5 7 11 13 17 19 23 29 31 37 41))
+(define DETERMINISM-LIMIT 318665857834031151167461)
 
 (define (square x) (* x x))
 (define (halve x) (/ x 2))
@@ -55,7 +56,10 @@
                    [else false]))]))
 
   ;; start iterating
-  (iter potential-prime SIGNIFICANT-PRIMES))
+  (cond [(>= potential-prime DETERMINISM-LIMIT)
+         (displayln "The result might not be correct, because the given number is not in range of the deterministic variation of this prime number test.")
+         (iter potential-prime SIGNIFICANT-PRIMES)]
+      [else (iter potential-prime SIGNIFICANT-PRIMES)]))
 
 (define (find-primes-limited min max result)
   (cond [(< min max)
