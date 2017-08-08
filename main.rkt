@@ -4,9 +4,24 @@
 (define MAX-BYTES (Mb-to-B 256))
 (custodian-limit-memory (current-custodian) MAX-BYTES)
 
+#;(require cpuinfo)
+(require racket/future)
+
+;; we need to export the main procedure so that we can call it from command line
 (provide main)
 
-(define PLACES-COUNT 4)
+#;(define (get-number-parallel-units)
+  (define (find-siblings remaining-core-info)
+    (cond [(empty? remaining-core-info) empty]
+          [(equal? (car (first remaining-core-info)) 'siblings)
+           (string->number (cdr (first remaining-core-info)))]
+          [else
+           (displayln "not:")
+           (displayln (car (first remaining-core-info)))
+           (find-siblings (rest remaining-core-info))]))
+  (find-siblings (car (get-cpuinfo))))
+
+(define PLACES-COUNT (processor-count))
 (define MIN 0)
 (define MAX 10000000)
 
@@ -33,3 +48,10 @@
       (display "place ")
       (display i)
       (displayln " finished."))))
+
+#|
+Call with:
+racket -tm file.rkt
+-t says that the file should be used
+-m means that the main function shall be called
+|#
